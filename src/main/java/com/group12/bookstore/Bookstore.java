@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication
 @RestController
-public class bookstore {
+public class Bookstore {
 
 	public static void main(String[] args) {
-		SpringApplication.run(bookstore.class, args);
+		SpringApplication.run(Bookstore.class, args);
 	}
 }
