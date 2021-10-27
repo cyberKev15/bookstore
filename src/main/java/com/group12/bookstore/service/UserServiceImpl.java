@@ -25,6 +25,9 @@ public class UserServiceImpl implements UserService {
     public User registerUser(String firstName, String lastName, String email, String password, String address) throws AuthException {
         Pattern pattern = Pattern.compile("^(.+)@(.+)$");
         if(email != null) email = email.toLowerCase();
+        if(email == null) {
+            System.out.println("Email must be provided!");
+        }
         if(!pattern.matcher(email).matches()) throw new AuthException("Email format is invalid.");
 
         Integer count = userRepository.getCountByEmail(email);
