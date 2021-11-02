@@ -30,8 +30,19 @@ public class UserResource {
 
        User user = userService.registerUser(firstName, lastName, email, password, address);
        Map<String, String> map = new HashMap<>();
-       map.put("message", "registered successfully");
+       map.put("message", "Registered Successfully");
        return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
+    
+     @RequestMapping("/get")
+    public User getUser(@RequestBody Map<String, Object> userMap){
+      
+       String email = (String) userMap.get("email");
+
+       return userService.getUser(email);
+      
+
+    }
+    
 }

@@ -15,9 +15,10 @@ import java.sql.Statement;
 @Repository
 public class UserRepositoryImpl implements  UserRepository {
 
-    private static final String SQL_CREATE = "INSERT INTO USERS(USER_ID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ADDRESS) VALUES(NEXTVAL('USERS_SEQ'), ?, ?, ?, ?, ?)";
+    private static final String SQL_CREATE = "INSERT INTO USERS(USERID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ADDRESS) VALUES(NEXTVAL('USERS_SEQ'), ?, ?, ?, ?, ?)";
     private static final String SQL_EMAIL_COUNT = "SELECT COUNT(*) FROM USERS WHERE EMAIL = ?";
-    private static final String SQL_FIND_BY_EMAIL = "SELECT USER_ID, FIRSTNAME, LASTNAME, EMAIL, ADDRESS" + "FROM USERS WHERE EMAIL = ?";
+    private static final String SQL_FIND_BY_EMAIL = "SELECT USERID, FIRSTNAME, LASTNAME, EMAIL, ADDRESS, PASSWORD " + "FROM USERS WHERE EMAIL = ?";
+    private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD " + "FROM ET_USERS WHERE USER_ID = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -36,7 +37,7 @@ public class UserRepositoryImpl implements  UserRepository {
                 ps.setString(5, address);
                 return ps;
             }, keyHolder);
-            return (Integer) keyHolder.getKeys().get("USER_ID");
+            return (Integer) keyHolder.getKeys().get("USERID");
         } catch (Exception ex) {
             throw new AuthException("Invalid Details. Account creation has failed.");
         }
@@ -44,7 +45,7 @@ public class UserRepositoryImpl implements  UserRepository {
 
     @Override
     public User findByUserId(Integer userId) throws AuthException {
-        return null;
+        return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{userId}, userRowMapper);
     }
 
     @Override
