@@ -38,4 +38,18 @@ public class UserServiceImpl implements UserService {
             return userRepository.findByUserId(userId);
         }
     }
+    
+    @Override
+    public User getUser(String email) throws AuthException {
+         Pattern pattern = Pattern.compile("^(.+)@(.+)$");
+        if(email != null) email = email.toLowerCase();
+        if(email == null) {
+            System.out.println("Email must be provided!");
+        }
+        if(!pattern.matcher(email).matches()) throw new AuthException("Email format is invalid.");
+        
+        else{
+            return userRepository.findByUsername(email);
+        }
+    }
 }

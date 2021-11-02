@@ -34,4 +34,15 @@ public class UserResource {
        return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
+    
+     @RequestMapping("/get")
+    public User getUser(@RequestBody Map<String, Object> userMap){
+      
+       String email = (String) userMap.get("email");
+
+       return userService.getUser(email);
+      
+
+    }
+    
 }
