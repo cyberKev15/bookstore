@@ -5,11 +5,9 @@ import com.group12.bookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,12 +35,18 @@ public class UserResource {
     
      @RequestMapping("/get")
     public User getUser(@RequestBody Map<String, Object> userMap){
-      
+
        String email = (String) userMap.get("email");
 
        return userService.getUser(email);
-      
+    }
 
+    @PutMapping("/{userId}")
+    public ResponseEntity<Map<String, Boolean>> updateUser(HttpServletRequest request, @PathVariable("userId") Integer userId, @RequestBody User user) {
+        userService.updateUser(userId, user);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("Success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
     
 }

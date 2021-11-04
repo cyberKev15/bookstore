@@ -2,6 +2,7 @@ package com.group12.bookstore.service;
 
 import com.group12.bookstore.domain.User;
 import com.group12.bookstore.exeptions.AuthException;
+import com.group12.bookstore.exeptions.BadRequestException;
 import com.group12.bookstore.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,11 @@ public class UserServiceImpl implements UserService {
         else{
             return userRepository.findByUsername(email);
         }
+    }
+
+    @Override
+    public void updateUser(Integer userId, User user) throws BadRequestException
+    {
+        userRepository.update(userId, user);
     }
 }

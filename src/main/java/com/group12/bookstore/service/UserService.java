@@ -2,6 +2,7 @@ package com.group12.bookstore.service;
 
 import com.group12.bookstore.domain.User;
 import com.group12.bookstore.exeptions.AuthException;
+import com.group12.bookstore.exeptions.BadRequestException;
 
 public interface UserService {
 
@@ -10,4 +11,6 @@ public interface UserService {
     User registerUser(String firstName, String lastName, String email, String password, String address) throws AuthException;
     
     User getUser(String email) throws AuthException;
+
+    void updateUser(Integer userId, User user) throws BadRequestException;
 }

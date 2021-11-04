@@ -2,6 +2,7 @@ package com.group12.bookstore.repositories;
 
 import com.group12.bookstore.domain.User;
 import com.group12.bookstore.exeptions.AuthException;
+import com.group12.bookstore.exeptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,6 +20,7 @@ public class UserRepositoryImpl implements  UserRepository {
     private static final String SQL_EMAIL_COUNT = "SELECT COUNT(*) FROM USERS WHERE EMAIL = ?";
     private static final String SQL_FIND_BY_EMAIL = "SELECT USERID, FIRSTNAME, LASTNAME, EMAIL, ADDRESS, PASSWORD " + "FROM USERS WHERE EMAIL = ?";
     private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD " + "FROM ET_USERS WHERE USER_ID = ?";
+    private static final String SQL_UPDATE = "UPDATE USERS SET ADDRESS = ? WHERE USERID = ? ";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -40,6 +42,15 @@ public class UserRepositoryImpl implements  UserRepository {
             return (Integer) keyHolder.getKeys().get("USERID");
         } catch (Exception ex) {
             throw new AuthException("Invalid Details. Account creation has failed.");
+        }
+    }
+
+    @Override
+    public void update(Integer userId, User user) throws BadRequestException {
+        try {
+            jdbcTemplate.update(SQL_UPDATE, new Object[]{user.getAddress(), userId});
+        } catch (Exception ex) {
+            throw new BadRequestException("Invalid Request");
         }
     }
 
