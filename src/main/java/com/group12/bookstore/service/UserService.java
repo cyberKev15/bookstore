@@ -10,4 +10,6 @@ public interface UserService {
     User registerUser(String firstName, String lastName, String email, String password, String address) throws AuthException;
     
     User getUser(String email) throws AuthException;
+    
+    User registercreditcard(String email, String cardNum, String expMonth, String expYear, String securityCode);
 }

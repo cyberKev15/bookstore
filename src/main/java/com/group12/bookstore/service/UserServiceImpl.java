@@ -52,4 +52,23 @@ public class UserServiceImpl implements UserService {
             return userRepository.findByUsername(email);
         }
     }
+    
+    @Override
+    public User registercreditcard(String email, String cardNum, String expMonth, String expYear, String securityCode){
+         Pattern pattern = Pattern.compile("^(.+)@(.+)$");
+        if(email != null) email = email.toLowerCase();
+        if(email == null) {
+            System.out.println("Email must be provided!");
+        }
+        if(!pattern.matcher(email).matches()) throw new AuthException("Email format is invalid.");
+
+        Integer count = userRepository.getCountByEmail(email);
+        if(count > 0) {
+             userRepository.registercreditcard(cardNum, expMonth, expYear, securityCode, email);
+             return userRepository.findByUsername(email);
+        } else {
+            throw new AuthException("This user is not registered here.");
+    }
+    
+}
 }

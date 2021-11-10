@@ -35,7 +35,7 @@ public class UserResource {
 
     }
     
-     @RequestMapping("/get")
+    @RequestMapping("/get")
     public User getUser(@RequestBody Map<String, Object> userMap){
       
        String email = (String) userMap.get("email");
@@ -43,6 +43,22 @@ public class UserResource {
        return userService.getUser(email);
       
 
+    }
+    
+    @PostMapping("/registercard")
+    public ResponseEntity<Map<String, String>> registerCard (@RequestBody Map<String, Object> userMap){
+        
+       String email = (String) userMap.get("email");
+       String cardNum = (String) userMap.get("cardNumber");
+       String expMonth = (String) userMap.get("expireMonth");
+       String expYear = (String) userMap.get("expYear");
+       String securityCode = (String) userMap.get("securityCode");
+       
+       User user = userService.registercreditcard(email, cardNum, expMonth, expYear, securityCode);
+       Map<String, String> map = new HashMap<>();
+       map.put("message", "Registered Successfully");
+       return new ResponseEntity<>(map, HttpStatus.OK);
+       
     }
     
 }

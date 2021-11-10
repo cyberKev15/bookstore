@@ -19,7 +19,10 @@ public class UserRepositoryImpl implements  UserRepository {
     private static final String SQL_EMAIL_COUNT = "SELECT COUNT(*) FROM USERS WHERE EMAIL = ?";
     private static final String SQL_FIND_BY_EMAIL = "SELECT USERID, FIRSTNAME, LASTNAME, EMAIL, ADDRESS, PASSWORD " + "FROM USERS WHERE EMAIL = ?";
     private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD " + "FROM ET_USERS WHERE USER_ID = ?";
-
+    private static final String SQL_CREATECC = "INSERT INTO CREDITCARD(EMAIL, CARDNUMBER, EXPIREMONTH, EXPIREYEAR, SECURITYCODE) VALUES(NEXTVAL('CREDITCARD_SEQ'), ?, ?, ?, ?)";
+    
+    
+    
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -58,6 +61,35 @@ public class UserRepositoryImpl implements  UserRepository {
         return jdbcTemplate.queryForObject(SQL_EMAIL_COUNT, new Object[]{email}, Integer.class);
     }
 
+    
+    @Override
+    public  void registercreditcard(String email, String cardNum, String expMonth, String expYear, String securityCode) throws AuthException {
+        
+        try {
+
+            
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(SQL_CREATECC, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, email );
+                ps.setString(2, cardNum);
+                ps.setString(3, expMonth);
+                ps.setString(4, expYear);
+                ps.setString(5, securityCode);
+                return ps;
+                 } );
+           
+                    }
+        catch (Exception ex) {
+            throw new AuthException("Invalid Details. Credi Card registration failure.");
+        }
+        
+    }
+    
+
+    
+    
+    
+    
     private RowMapper<User> userRowMapper = ((rs, rowNum) -> {
         return new User(rs.getInt("userId"),
                 rs.getString("firstName"),
