@@ -62,4 +62,8 @@ public class CreditCard {
         this.address = address;
     }
 
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
