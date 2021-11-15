@@ -16,5 +16,4 @@ address varchar (100));
 
 create sequence users_seq increment 1 start 1;
 
-
-
+create sequence books_seq increment 1 start 1;
