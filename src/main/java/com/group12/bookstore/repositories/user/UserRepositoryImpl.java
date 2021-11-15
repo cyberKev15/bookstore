@@ -1,8 +1,11 @@
-package com.group12.bookstore.repositories;
+package com.group12.bookstore.repositories.user;
 
 import com.group12.bookstore.domain.User;
 import com.group12.bookstore.exeptions.AuthException;
 import com.group12.bookstore.exeptions.BadRequestException;
+import com.group12.bookstore.repositories.book.BookDataRepositoryImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,12 +15,11 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
 @Repository
-public class UserRepositoryImpl implements  UserRepository {
+public class UserRepositoryImpl implements UserRepository {
 
-    private static final Logger logger = Logger.getLogger("User Repository");
+    Logger logger = LoggerFactory.getLogger(BookDataRepositoryImpl.class);
 
     private static final String SQL_CREATE = "INSERT INTO USERS(USERID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ADDRESS) VALUES(NEXTVAL('USERS_SEQ'), ?, ?, ?, ?, ?)";
     private static final String SQL_EMAIL_COUNT = "SELECT COUNT(*) FROM USERS WHERE EMAIL = ?";
@@ -39,7 +41,7 @@ public class UserRepositoryImpl implements  UserRepository {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, firstName );
+                ps.setString(1, firstName);
                 ps.setString(2, lastName);
                 ps.setString(3, email);
                 ps.setString(4, password);
@@ -75,7 +77,7 @@ public class UserRepositoryImpl implements  UserRepository {
                 jdbcTemplate.update(SQL_UPDATE_PASSWORD, new Object[]{user.getPassword(), userId});
             }
         } catch (Exception ex) {
-            logger.info("ERROR - BAD REQUEST - User Account update has failed.");
+            logger.error("ERROR - BAD REQUEST - User Account update has failed.");
             throw new BadRequestException("Invalid Details. Account update has failed.");
         }
     }

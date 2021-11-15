@@ -1,7 +1,7 @@
-package com.group12.bookstore.repositories;
+package com.group12.bookstore.repositories.user;
 
-import com.group12.bookstore.exeptions.AuthException;
 import com.group12.bookstore.domain.User;
+import com.group12.bookstore.exeptions.AuthException;
 import com.group12.bookstore.exeptions.BadRequestException;
 
 public interface UserRepository {

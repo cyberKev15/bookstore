@@ -1,7 +1,7 @@
 package com.group12.bookstore.resources;
 
 import com.group12.bookstore.domain.User;
-import com.group12.bookstore.service.UserService;
+import com.group12.bookstore.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,26 +19,26 @@ public class UserResource {
     UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> registerUser(@RequestBody Map<String, Object> userMap){
-       String firstName = (String) userMap.get("firstName");
-       String lastName = (String) userMap.get("lastName");
-       String email = (String) userMap.get("email");
-       String password = (String) userMap.get("password");
-       String address = (String) userMap.get("address");
+    public ResponseEntity<Map<String, String>> registerUser(@RequestBody Map<String, Object> userMap) {
+        String firstName = (String) userMap.get("firstName");
+        String lastName = (String) userMap.get("lastName");
+        String email = (String) userMap.get("email");
+        String password = (String) userMap.get("password");
+        String address = (String) userMap.get("address");
 
-       User user = userService.registerUser(firstName, lastName, email, password, address);
-       Map<String, String> map = new HashMap<>();
-       map.put("message", "Registered Successfully");
-       return new ResponseEntity<>(map, HttpStatus.OK);
+        User user = userService.registerUser(firstName, lastName, email, password, address);
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "Registered Successfully");
+        return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
-    
-     @RequestMapping("/get")
-    public User getUser(@RequestBody Map<String, Object> userMap){
 
-       String email = (String) userMap.get("email");
+    @RequestMapping("/get")
+    public User getUser(@RequestBody Map<String, Object> userMap) {
 
-       return userService.getUser(email);
+        String email = (String) userMap.get("email");
+
+        return userService.getUser(email);
     }
 
     @PutMapping("/{userId}")
@@ -48,5 +48,5 @@ public class UserResource {
         map.put("Success", true);
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
-    
+
 }
