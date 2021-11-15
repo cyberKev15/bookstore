@@ -2,6 +2,8 @@ package com.group12.bookstore.resources;
 
 import com.group12.bookstore.domain.User;
 import com.group12.bookstore.service.UserService;
+import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,13 +48,18 @@ public class UserResource {
     }
     
     @PostMapping("/registercard")
-    public ResponseEntity<Map<String, String>> registerCard (@RequestBody Map<String, Object> userMap){
+    public ResponseEntity<Map<String, String >> registerCard (@RequestBody Map<String, Object> userMap){
         
        String email = (String) userMap.get("email");
-       String cardNum = (String) userMap.get("cardNumber");
-       String expMonth = (String) userMap.get("expireMonth");
-       String expYear = (String) userMap.get("expYear");
-       String securityCode = (String) userMap.get("securityCode");
+       String cardNumm = (String) userMap.get("cardNumber");
+       String expMonthh = (String) userMap.get("expireMonth");
+       String expYearr = (String) userMap.get("expYear");
+       String securityCodee = (String) userMap.get("securityCode");
+       
+       long cardNum = parseLong(cardNumm);
+       int expMonth = parseInt(expMonthh);
+       int expYear = parseInt(expYearr);
+       int securityCode = parseInt(securityCodee);
        
        User user = userService.registercreditcard(email, cardNum, expMonth, expYear, securityCode);
        Map<String, String> map = new HashMap<>();

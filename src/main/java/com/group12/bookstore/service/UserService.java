@@ -11,5 +11,5 @@ public interface UserService {
     
     User getUser(String email) throws AuthException;
     
-    User registercreditcard(String email, String cardNum, String expMonth, String expYear, String securityCode);
+    User registercreditcard(String email, long cardNum, int expMonth, int expYear, int securityCode);
 }

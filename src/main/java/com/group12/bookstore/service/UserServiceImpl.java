@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public User registercreditcard(String email, String cardNum, String expMonth, String expYear, String securityCode){
+    public User registercreditcard(String email, long cardNum, int expMonth, int expYear, int securityCode){
          Pattern pattern = Pattern.compile("^(.+)@(.+)$");
         if(email != null) email = email.toLowerCase();
         if(email == null) {
@@ -64,10 +64,10 @@ public class UserServiceImpl implements UserService {
 
         Integer count = userRepository.getCountByEmail(email);
         if(count > 0) {
-             userRepository.registercreditcard(cardNum, expMonth, expYear, securityCode, email);
+             userRepository.registercreditcard(email ,cardNum, expMonth, expYear, securityCode);
              return userRepository.findByUsername(email);
         } else {
-            throw new AuthException("This user is not registered here.");
+            throw new AuthException("This user is not register here.");
     }
     
 }

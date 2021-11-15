@@ -19,7 +19,7 @@ public class UserRepositoryImpl implements  UserRepository {
     private static final String SQL_EMAIL_COUNT = "SELECT COUNT(*) FROM USERS WHERE EMAIL = ?";
     private static final String SQL_FIND_BY_EMAIL = "SELECT USERID, FIRSTNAME, LASTNAME, EMAIL, ADDRESS, PASSWORD " + "FROM USERS WHERE EMAIL = ?";
     private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD " + "FROM ET_USERS WHERE USER_ID = ?";
-    private static final String SQL_CREATECC = "INSERT INTO CREDITCARD(EMAIL, CARDNUMBER, EXPIREMONTH, EXPIREYEAR, SECURITYCODE) VALUES(NEXTVAL('CREDITCARD_SEQ'), ?, ?, ?, ?)";
+    private static final String SQL_CREATECC = "INSERT INTO CREDITCARD(EMAIL, CARDNUMBER, EXPIREMONTH, EXPIREYEAR, SECURITYCODE) VALUES(?, ?, ?, ?, ?)";
     
     
     
@@ -63,21 +63,22 @@ public class UserRepositoryImpl implements  UserRepository {
 
     
     @Override
-    public  void registercreditcard(String email, String cardNum, String expMonth, String expYear, String securityCode) throws AuthException {
+    public  void registercreditcard(String email, long cardNum, int expMonth, int expYear, int securityCode) throws AuthException {
+        
         
         try {
 
-            
+            KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(SQL_CREATECC, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, email );
-                ps.setString(2, cardNum);
-                ps.setString(3, expMonth);
-                ps.setString(4, expYear);
-                ps.setString(5, securityCode);
+                ps.setLong(2, cardNum);
+                ps.setInt(3, expMonth);
+                ps.setInt(4, expYear);
+                ps.setInt(5, securityCode);
                 return ps;
-                 } );
-           
+                 }, keyHolder);
+             
                     }
         catch (Exception ex) {
             throw new AuthException("Invalid Details. Credi Card registration failure.");

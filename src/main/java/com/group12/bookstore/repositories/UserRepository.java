@@ -14,6 +14,6 @@ public interface UserRepository {
     //Method to check email count - this keeps from registering the same email
     Integer getCountByEmail(String email);
     
-    void registercreditcard(String email, String cardNum, String expMonth, String expYear, String securityCode) throws AuthException;
+    void registercreditcard(String email, long cardNum, int expMonth, int expYear, int securityCode) throws AuthException;
 
 }
