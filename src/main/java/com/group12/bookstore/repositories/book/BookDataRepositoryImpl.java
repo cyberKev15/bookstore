@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -17,6 +18,7 @@ public class BookDataRepositoryImpl implements BookDataRepository {
     Logger logger = LoggerFactory.getLogger(BookDataRepositoryImpl.class);
 
     private static final String SQL_CREATE_BOOK = "INSERT INTO BOOKS(ISBN, BNAME, BDESCRIPTION, BPRICE, AUTHORNAME, BGENRE, BPUBLISHER, BYEAR, SOLDBOOKS, BRATING) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_FIND_BY_ISBN = "SELECT ISBN, BNAME, BDESCRIPTION, BPRICE, AUTHORNAME, BGENRE, BPUBLISHER, BYEAR, SOLDBOOKS, BRATING " + "FROM BOOKS WHERE ISBN = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -24,7 +26,7 @@ public class BookDataRepositoryImpl implements BookDataRepository {
     private String methodName = "createBook";
 
     /***
-     * This method---
+     * Description - This method creates the connection to the DB and creates a prepared statement for book details insert.
      * @param isbn
      * @param bookName
      * @param bookDescription
@@ -35,8 +37,8 @@ public class BookDataRepositoryImpl implements BookDataRepository {
      * @param yearPublished
      * @param copiesSold
      * @param rating
-     * @throws BadRequestException
      * @return
+     * @throws BadRequestException
      */
     @Override
     public BookData createBook(Long isbn, String bookName, String bookDescription, Double price, String author, String genre, String publisher, String yearPublished, String copiesSold, Integer rating) throws BadRequestException {
@@ -64,4 +66,22 @@ public class BookDataRepositoryImpl implements BookDataRepository {
         }
         return null;
     }
+
+    @Override
+    public BookData findByIsbn(Long isbn) throws BadRequestException {
+        return jdbcTemplate.queryForObject(SQL_FIND_BY_ISBN, new Object[]{isbn}, bookDataRowMapper);
+    }
+
+    private RowMapper<BookData> bookDataRowMapper = ((rs, rowNum) -> {
+        return new BookData(rs.getLong("isbn"),
+                rs.getString("bname"),
+                rs.getString("bdescription"),
+                rs.getDouble("bprice"),
+                rs.getString("authorname"),
+                rs.getString("bgenre"),
+                rs.getString("bpublisher"),
+                rs.getString("byear"),
+                rs.getString("soldbooks"),
+                rs.getInt(("brating")));
+    });
 }
