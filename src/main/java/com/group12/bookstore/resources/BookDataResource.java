@@ -39,4 +39,11 @@ public class BookDataResource {
         map.put("message", "Book Data added successfully");
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
+
+    @RequestMapping("/get-data")
+    public BookData getBookData(@RequestBody Map<String, Object> bookMap) {
+        Long isbn = (Long) bookMap.get("isbn");
+
+        return bookDataService.getBook(isbn);
+    }
 }
