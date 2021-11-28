@@ -1,15 +1,18 @@
 package com.group12.bookstore.repositories.author;
 
 import com.group12.bookstore.domain.Author;
+import com.group12.bookstore.domain.BookData;
 import com.group12.bookstore.exeptions.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 
 @Repository
 public class AuthorRepositoryImpl implements AuthorRepository {
@@ -17,6 +20,8 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     Logger logger = LoggerFactory.getLogger(AuthorRepositoryImpl.class);
 
     private static final String SQL_CREATE_AUTHOR = "INSERT INTO AUTHOR(AFIRSTNAME, ALASTNAME, PUBLISHER, BIOGRAPHY) VALUES(?, ?, ?, ?)";
+    private static final String SQL_GET_BOOKS_BY_AUTHOR = "SELECT * " + "FROM BOOKS WHERE AUTHORNAME = ?";
+
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -44,4 +49,23 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         }
         return null;
     }
+
+    @Override
+    public List<BookData> getBooks(String authorName) throws BadRequestException {
+        List<BookData> books = jdbcTemplate.query(SQL_GET_BOOKS_BY_AUTHOR, new Object[]{authorName}, bookDataRowMapper);
+        return books;
+    }
+
+    private RowMapper<BookData> bookDataRowMapper = ((rs, rowNum) -> {
+        return new BookData(rs.getLong("isbn"),
+                rs.getString("bname"),
+                rs.getString("bdescription"),
+                rs.getDouble("bprice"),
+                rs.getString("authorname"),
+                rs.getString("bgenre"),
+                rs.getString("bpublisher"),
+                rs.getString("byear"),
+                rs.getString("soldbooks"),
+                rs.getInt(("brating")));
+    });
 }
