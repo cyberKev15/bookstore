@@ -41,6 +41,23 @@ public class UserResource {
         return userService.getUser(email);
     }
 
+    @PostMapping("/registercard")
+    public ResponseEntity<Map<String, String>> registerCard(@RequestBody Map<String, Object> userMap) {
+
+        String email = (String) userMap.get("email");
+        long cardNum = (long) userMap.get("cardNumber");
+        int expMonth = (int) userMap.get("expireMonth");
+        int expYear = (int) userMap.get("expYear");
+        int securityCode = (int) userMap.get("securityCode");
+
+
+        User user = userService.registerCreditCard(email, cardNum, expMonth, expYear, securityCode);
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "Registered Successfully");
+        return new ResponseEntity<>(map, HttpStatus.OK);
+
+    }
+
     @PutMapping("/{userId}")
     public ResponseEntity<Map<String, Boolean>> updateUser(HttpServletRequest request, @PathVariable("userId") Integer userId, @RequestBody User user) {
         userService.updateUser(userId, user);

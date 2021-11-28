@@ -13,4 +13,6 @@ public interface UserService {
     User getUser(String email) throws AuthException;
 
     void updateUser(Integer userId, User user) throws BadRequestException;
+
+    public User registerCreditCard(String email, long cardNum, int expMonth, int expYear, int securityCode);
 }

@@ -58,4 +58,24 @@ public class UserServiceImpl implements UserService {
     public void updateUser(Integer userId, User user) throws BadRequestException {
         userRepository.update(userId, user);
     }
+
+    @Override
+    public User registerCreditCard(String email, long cardNum, int expMonth, int expYear, int securityCode) {
+        Pattern pattern = Pattern.compile("^(.+)@(.+)$");
+        if (email != null) email = email.toLowerCase();
+        if (email == null) {
+            System.out.println("Email must be provided!");
+        }
+        if (!pattern.matcher(email).matches()) throw new AuthException("Email format is invalid.");
+
+        Integer count = userRepository.getCountByEmail(email);
+        if (count > 0) {
+            userRepository.registerCreditCard(email, cardNum, expMonth, expYear, securityCode);
+            return userRepository.findByUsername(email);
+        } else {
+            throw new AuthException("This user is not registered here.");
+        }
+    }
+
+
 }

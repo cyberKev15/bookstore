@@ -12,10 +12,12 @@ public interface UserRepository {
 
     User findByUsername(String email) throws AuthException;
 
-    //Update user address
+    //Method to update user address
     void update(Integer userId, User user) throws BadRequestException;
 
     //Method to check email count - this keeps from registering the same email
     Integer getCountByEmail(String email);
 
+    //Method to register credit card for a user
+    void registerCreditCard(String email, long cardNum, int expMonth, int expYear, int securityCode) throws AuthException;
 }
